@@ -76,8 +76,8 @@ class SingleModePage(tk.Frame):
         # table
         self.table = tk.Frame(self, pady=100)
 
-        for i in range(tableWidth):
-            for j in range(tableHeight):
+        for x in range(tableWidth):
+            for y in range(tableHeight):
                 img = ImageTk.PhotoImage(
                     image=Image.open('{}/defaultblock.png'.format(image_path)).resize(
                         size=(20, 20)))
