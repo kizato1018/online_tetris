@@ -1,3 +1,11 @@
+# vscode  config
 .vscode
+
+# python temporary file
 __pycache__
+
+# Mac file system
 .DS_Store
+
+# python logs
+logs
