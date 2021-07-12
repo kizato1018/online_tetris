@@ -1,11 +1,11 @@
-import tkinter as tk
 from tkinter.constants import TRUE
+import tkinter as tk
+import logging
+import time
+
 from models import Model
 from views import View
 from blocks import Block
-import logging
-import sys
-import time
 
 
 class Controller():
@@ -19,14 +19,17 @@ class Controller():
         self.root.mainloop()
 
     def show_frame(self, page_name):
+        logging.debug(f"Show Frame {page_name}")
         self.view.show_frame(page_name)
 
     def initialize_game(self, gamemode: str):
+        logging.info("Game initializing...")
         self.show_frame(f'{gamemode}Page')
         self.root.update()
         self.start_game(gamemode)
 
     def start_game(self, gamemode: str):
+        logging.info("Game start")
         self.autoAddBlock()
 
     def blockUpdate(self, x: int, y: int, blocktype: str):
