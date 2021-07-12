@@ -1,14 +1,9 @@
-import threading
+from PIL import ImageTk, Image
 import logging
 import tkinter as tk
-from tkinter import ttk
-import os
+import sys
 
 from blocks import Block
-
-from tkinter import ttk
-from PIL import ImageTk, Image
-import sys
 
 
 class View():
@@ -92,6 +87,8 @@ class SingleModePage(tk.Frame):
         # Initialization
         tk.Frame.__init__(self, parent)
         self.controller = controller
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
         tableWidth = 10
         tableHeight = 20
 
