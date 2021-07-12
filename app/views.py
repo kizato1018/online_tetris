@@ -1,9 +1,34 @@
+import threading
+import logging
 import tkinter as tk
 from tkinter import ttk
-from PIL import ImageTk, Image
 import os
 
-image_path = os.path.dirname(os.path.abspath(__file__)) + '/image'
+from blocks import Block
+
+from tkinter import ttk
+from PIL import ImageTk, Image
+import sys
+
+
+class View():
+    def __init__(self, master, controller) -> None:
+        self.controller = controller
+        self.master = master
+        self.master.grid_columnconfigure(0, weight=1)
+        self.master.grid_rowconfigure(0, weight=1)
+
+        self.frame = MainPage(parent=self.master, controller=self.controller)
+        self.frame.grid(row=0, column=0, sticky="nsew")
+
+    def show_frame(self, page_name) -> bool:
+        for frame in self.master.winfo_children():
+            frame.destroy()
+        self.frame = getattr(sys.modules[__name__],
+                             page_name)(parent=self.master,
+                                        controller=self.controller)
+        self.frame.grid(row=0, column=0, sticky="nsew")
+
 
 class MainPage(tk.Frame):
     def __init__(self, parent, controller):
@@ -16,11 +41,11 @@ class MainPage(tk.Frame):
         button1 = tk.Button(
             self,
             text="單人遊戲",
-            command=lambda: controller.start_game("SingleMode"))
+            command=lambda: controller.initialize_game("SingleMode"))
         button2 = tk.Button(
             self,
             text="多人遊戲",
-            command=lambda: controller.start_game("MultiMode"))
+            command=lambda: controller.initialize_game("MultiMode"))
         button3 = tk.Button(
             self,
             text="設定",
@@ -69,7 +94,7 @@ class SingleModePage(tk.Frame):
         self.controller = controller
         tableWidth = 10
         tableHeight = 20
-        
+
         # page title
         pageTitleLabel = tk.Label(self, text="SingleMode page")
 
@@ -78,41 +103,21 @@ class SingleModePage(tk.Frame):
 
         for x in range(tableWidth):
             for y in range(tableHeight):
-                img = ImageTk.PhotoImage(
-                    image=Image.open('{}/defaultblock.png'.format(image_path)).resize(
-                        size=(20, 20)))
-                imageLabel = tk.Label(self.table, image=img)
-                imageLabel.image = img
+                block = Block("default")
+                imageLabel = tk.Label(self.table, image=block.image)
+                imageLabel.image = block.image
                 imageLabel.grid(column=x, row=y)
 
         # Layout for whole page
         pageTitleLabel.grid(column=0, row=0)
         self.table.grid(column=0, row=1)
+
+    def change_block_type(self, x: int, y: int, block: Block):
+        imageLabel = tk.Label(self.table, image=block.image)
+        imageLabel.image = block.image
+        imageLabel.grid(column=x, row=y)
 
 
 class MultiModePage(tk.Frame):
     def __init__(self, parent, controller):
-        # Initialization
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-        tableWidth = 10
-        tableHeight = 20
-
-        # page title
-        pageTitleLabel = tk.Label(self, text="MultiMode page")
-
-        # table
-        self.table = tk.Frame(self, pady=100)
-
-        for x in range(tableWidth):
-            for y in range(tableHeight):
-                img = ImageTk.PhotoImage(
-                    image=Image.open('{}/defaultblock.png'.format(image_path)).resize(
-                        size=(20, 20)))
-                imageLabel = tk.Label(self.table, image=img)
-                imageLabel.image = img
-                imageLabel.grid(column=x, row=y)
-
-        # Layout for whole page
-        pageTitleLabel.grid(column=0, row=0)
-        self.table.grid(column=0, row=1)
+        pass
