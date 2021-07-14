@@ -3,7 +3,7 @@ import logging
 import tkinter as tk
 import sys
 
-from blocks import Block
+from objects import Block, Table
 
 
 class View():
@@ -89,30 +89,28 @@ class SingleModePage(tk.Frame):
         self.controller = controller
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        tableWidth = 10
-        tableHeight = 20
+        self.blockLength = 50
+        self.padding = 5
 
         # page title
         pageTitleLabel = tk.Label(self, text="SingleMode page")
 
         # table
-        self.table = tk.Frame(self, pady=100)
-
-        for x in range(tableWidth):
-            for y in range(tableHeight):
-                block = Block("default")
-                imageLabel = tk.Label(self.table, image=block.image)
-                imageLabel.image = block.image
-                imageLabel.grid(column=x, row=y)
+        self.tableCanva = tk.Canvas(self, width=500, height= 1000, pady=100)
 
         # Layout for whole page
         pageTitleLabel.grid(column=0, row=0)
-        self.table.grid(column=0, row=1)
+        self.tableCanva.grid(column=0, row=1)
 
-    def change_block_type(self, x: int, y: int, block: Block):
-        imageLabel = tk.Label(self.table, image=block.image)
-        imageLabel.image = block.image
-        imageLabel.grid(column=x, row=y)
+    def initial_gametable(tableWidth, tableHeight):
+        for x in range(tableWidth):
+            for y in range(tableHeight):
+                self.tableCanva.create_rectangle(x * (self.blockLength + self.padding), y * (self.blockLength+self.padding), (x+1) * self.blockLength, (y+1) * self.blockLength, fill="#FFFFFF")
+
+    def update_table_canva(self, table: Table):
+        for x in range(Table.width):
+            for y in range(Table.height):
+                self.tableCanva.create_rectangle(x * (self.blockLength + self.padding), y * (self.blockLength + self.padding), (x+1) * self.blockLength, (y+1) * self.blockLength, fill=table.get_real_table()[x][y].color)
 
 
 class MultiModePage(tk.Frame):

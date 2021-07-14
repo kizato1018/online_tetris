@@ -5,7 +5,6 @@ import keyboard
 from time import sleep
 from copy import deepcopy
 
-
 class Position:
     def __init__(self, x, y):
         self.x = x
@@ -50,7 +49,6 @@ def show(table,h,w):
 # falldown feature
 def falldown(block: np.array, table,pos,h,w,sp):
     cur_table = deepcopy(table)
-    ActionMove(pos,block)
     while (not collision(table, block, pos)):
         screen_clear()
         show(cur_table,h,w)
@@ -93,11 +91,6 @@ def ActionRight(pos):
 def ActionUp(block):
     block = rotate(block)
 
-
-# user_action for direction
-def ActionMove(pos,block):
-    keyboard.on_press_key("left",lambda _:ActionLeft(pos))
-    keyboard.on_press_key("right",lambda _:ActionRight(pos))
 
 
 def GameStatus(table,w):
@@ -164,12 +157,13 @@ if __name__ == "__main__":
                   ]  # the screen platform no block:0/have block:1 status
     table_init(main_table,height,width,bias)
 
+
     while(game_status):
         # fall down position
         position.y = 1
         position.x = 3
         # get random block feom block_types
         cur_block = np.array(random.choice(block_types))
-        main_table = falldown(cur_block, main_table,position,height,width,speed)
-        game_status = GameStatus(main_table,width)
+        # main_table = falldown(cur_block, main_table,position,height,width,speed)
+        # game_status = GameStatus(main_table,width)
     
