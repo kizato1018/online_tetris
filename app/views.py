@@ -1,3 +1,5 @@
+from tkinter import font
+from tkinter.constants import CENTER
 from PIL import ImageTk, Image
 import logging
 import tkinter as tk
@@ -88,29 +90,87 @@ class SingleModePage(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        self.blockLength = 50
-        self.padding = 5
+        self.grid_rowconfigure(1, weight=1)
+        self.blockLength = 20
+        self.padding = 0
+        self.score = 100
 
         # page title
         pageTitleLabel = tk.Label(self, text="SingleMode page")
 
-        # table
-        self.tableCanva = tk.Canvas(self, width=500, height= 1000, pady=100)
+        # score
+        scoreLabel = tk.Label(self,
+                              text=str(self.score),
+                              textvariable=str(self.score),
+                              justify=CENTER,
+                              font=('Times', 24, 'bold italic underline'),
+                              bg="red")
 
         # Layout for whole page
         pageTitleLabel.grid(column=0, row=0)
-        self.tableCanva.grid(column=0, row=1)
+        scoreLabel.grid(column=1, row=0)
 
-    def initial_gametable(tableWidth, tableHeight):
-        for x in range(tableWidth):
-            for y in range(tableHeight):
-                self.tableCanva.create_rectangle(x * (self.blockLength + self.padding), y * (self.blockLength+self.padding), (x+1) * self.blockLength, (y+1) * self.blockLength, fill="#FFFFFF")
+    def initialize_gametable(self, tableWidth, tableHeight):
+        # table
+        self.tableCanva = tk.Canvas(
+            self,
+            width=(tableWidth + 2) * (self.blockLength + self.padding),
+            height=(tableHeight + 2) * (self.blockLength + self.padding))
+        self.tableCanva.grid(column=0, row=1)
+        for x in range(tableWidth + 2):
+            for y in range(tableHeight + 2):
+
+                x_0 = x * (self.blockLength + self.padding) + self.padding
+                y_0 = y * (self.blockLength + self.padding) + self.padding
+                x_1 = x * (self.blockLength +
+                           self.padding) + self.blockLength + self.padding
+                y_1 = y * (self.blockLength +
+                           self.padding) + self.blockLength + self.padding
+                if x == 0 or x == tableWidth + 1 or y == 0 or y == tableHeight + 1:
+                    self.tableCanva.create_rectangle(x_0,
+                                                     y_0,
+                                                     x_1,
+                                                     y_1,
+                                                     fill="grey",
+                                                     outline="black")
+                else:
+                    self.tableCanva.create_rectangle(x_0,
+                                                     y_0,
+                                                     x_1,
+                                                     y_1,
+                                                     fill=Block().color,
+                                                     outline="black")
 
     def update_table_canva(self, table: Table):
-        for x in range(Table.width):
-            for y in range(Table.height):
-                self.tableCanva.create_rectangle(x * (self.blockLength + self.padding), y * (self.blockLength + self.padding), (x+1) * self.blockLength, (y+1) * self.blockLength, fill=table.get_real_table()[x][y].color)
+        for x in range(table.width + 2):
+            for y in range(table.height + 2):
+
+                x_0 = x * (self.blockLength + self.padding) + self.padding
+                y_0 = y * (self.blockLength + self.padding) + self.padding
+                x_1 = x * (self.blockLength +
+                           self.padding) + self.blockLength + self.padding
+                y_1 = y * (self.blockLength +
+                           self.padding) + self.blockLength + self.padding
+                if x == 0 or x == table.width + 1 or y == 0 or y == table.height + 1:
+                    self.tableCanva.create_rectangle(x_0,
+                                                     y_0,
+                                                     x_1,
+                                                     y_1,
+                                                     fill="grey",
+                                                     outline="black")
+                else:
+                    self.tableCanva.create_rectangle(
+                        x_0,
+                        y_0,
+                        x_1,
+                        y_1,
+                        fill=table.get_real_table()[x][y].color,
+                    )
+
+    def update_score(self, score):
+        self.score = score
 
 
 class MultiModePage(tk.Frame):
