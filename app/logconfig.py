@@ -11,7 +11,7 @@ formatter = logging.Formatter(
 
 # stderr stream logging
 ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
+ch.setLevel(logging.INFO)
 ch.setFormatter(formatter)
 
 # file logging
