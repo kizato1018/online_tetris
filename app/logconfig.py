@@ -3,7 +3,7 @@ import datetime
 import os
 
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter(
     '%(asctime)s - %(name)s [%(levelname)s]  %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S',
